@@ -7,7 +7,9 @@ export default defineConfig({
     () => import('@adonisjs/core/providers/app_provider'),
     () => import('@adonisjs/core/providers/vinejs_provider'),
     () => import('@adonisjs/static/static_provider'),
+    () => import('@adonisjs/lucid/database_provider'),
   ],
+  commands: [() => import('@adonisjs/core/commands'), () => import('@adonisjs/lucid/commands')],
   preloads: [
     () => import('#app/core/providers/api_provider'),
     () => import('./start/kernel.js'),
@@ -19,7 +21,13 @@ export default defineConfig({
         transformers: {
           enabled: true,
           source: './app',
-          glob: ['**/transformers/*_transformer.ts'],
+          glob: ['**/*_transformer.ts'],
+          importAlias: '#app',
+        },
+        controllers: {
+          enabled: true,
+          source: './app',
+          glob: ['**/*_controller.ts'],
           importAlias: '#app',
         },
       }),

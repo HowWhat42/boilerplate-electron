@@ -1,35 +1,18 @@
 import type { HttpContext } from '@adonisjs/core/http'
 
-import vine from '@vinejs/vine'
-import { getDb } from '#app/core/db/connection'
+import Note from '#core/models/notes'
 
-/**
- * Example CRUD controller demonstrating:
- *   - VineJS validation
- *   - Kysely query building against DuckDB
- *   - JSON responses via the API serializer
- */
-const createNoteValidator = vine.compile(
-  vine.object({
-    title: vine.string().minLength(1).maxLength(200),
-    body: vine.string().optional(),
-  }),
-)
+import { createNoteValidator } from '../validators/note.ts'
 
 export default class NotesController {
   async index() {
-    return getDb().selectFrom('notes').selectAll().orderBy('id', 'desc').execute()
+    return Note.all()
   }
 
   async store({ request, response }: HttpContext) {
     const payload = await request.validateUsing(createNoteValidator)
 
-    const [note] = await getDb()
-      .insertInto('notes')
-      .values({ title: payload.title, body: payload.body ?? null })
-      .returningAll()
-      .execute()
-
+    const note = await Note.create(payload)
     return response.created(note)
   }
 }

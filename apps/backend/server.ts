@@ -1,11 +1,7 @@
 import 'reflect-metadata'
 import pc from 'picocolors'
-import { join } from 'node:path'
-import { homedir } from 'node:os'
 import { createRequire } from 'node:module'
 import { Ignitor, prettyPrintError } from '@adonisjs/core'
-import { initializeSchema } from '#app/core/db/schema'
-import { closeConnection, initConnection } from '#app/core/db/connection'
 
 const require = createRequire(import.meta.url)
 const { version } = require('@boilerplate/backend/package.json')
@@ -35,7 +31,6 @@ function printStartupBanner() {
 export async function startServer(options: DevToolsOptions = {}) {
   const port = options.port ?? 4200
   const host = options.host ?? '127.0.0.1'
-  const dbPath = options.dbPath ?? join(homedir(), '.config', 'boilerplate', 'backend.db')
 
   const APP_ROOT = new URL('./', import.meta.url)
   const IMPORTER = (filePath: string) => {
@@ -55,22 +50,15 @@ export async function startServer(options: DevToolsOptions = {}) {
    */
   process.on('SIGINT', async () => {
     console.log(`\n  ${pc.dim('Shutting down...')}`)
-    await closeConnection()
     process.exit(0)
   })
 
   process.on('SIGTERM', async () => {
-    await closeConnection()
     process.exit(0)
   })
 
   new Ignitor(APP_ROOT, { importer: IMPORTER })
     .tap((app) => {
-      app.booting(async () => {
-        const db = await initConnection(dbPath)
-        await initializeSchema(db)
-      })
-
       app.ready(async () => {
         printStartupBanner()
       })
