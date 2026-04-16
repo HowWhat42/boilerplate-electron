@@ -1,0 +1,16 @@
+{
+  "extends": "@adonisjs/tsconfig/tsconfig.app.json",
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "./build",
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "paths": {
+      "~/*": ["./*"],
+      "~/generated/*": ["../.adonisjs/client/*"],
+      "~registry": ["../.adonisjs/client/registry.ts"]
+    }
+  },
+  "include": ["./**/*.ts", "./**/*.tsx", "./.adonisjs/**/*.ts"],
+  "exclude": ["node_modules", "build"]
+}

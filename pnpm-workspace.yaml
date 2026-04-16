@@ -1,0 +1,23 @@
+packages:
+  - apps/*
+  - packages/*
+
+catalog:
+  # Shared tooling
+  '@tuyau/core': 1.2.2
+  '@tuyau/react-query': 1.1.0
+  ts-pattern: ^5.9.0
+
+  # React
+  react: ^19.2.4
+  react-dom: ^19.2.4
+  '@types/react': ^19.2.14
+  '@types/react-dom': ^19.2.3
+
+  # TypeScript
+  typescript: ^5.9.3
+  '@types/node': ^25.5.0
+
+  # Tailwind
+  tailwindcss: ^4.2.2
+  '@tailwindcss/vite': ^4.2.2
