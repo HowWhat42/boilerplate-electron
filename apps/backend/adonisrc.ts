@@ -1,7 +1,7 @@
-import { generateRegistry } from '@tuyau/core/hooks'
-import { defineConfig } from '@adonisjs/core/app'
-import { indexEntities } from '@adonisjs/core'
-import { indexControllers } from '@adonisjs-community/girouette'
+import { generateRegistry } from "@tuyau/core/hooks";
+import { defineConfig } from "@adonisjs/core/app";
+import { indexEntities } from "@adonisjs/core";
+import { indexControllers } from "@adonisjs-community/girouette";
 
 export default defineConfig({
   /*
@@ -29,12 +29,12 @@ export default defineConfig({
   |
   */
   commands: [
-    () => import('@adonisjs/core/commands'),
-    () => import('@adonisjs/lucid/commands'),
-    () => import('@tuyau/core/commands'),
-    () => import('@adonisjs-community/modules/commands'),
-    () => import('@adonisjs/mail/commands'),
-    () => import('@adonisjs/bouncer/commands'),
+    () => import("@adonisjs/core/commands"),
+    () => import("@adonisjs/lucid/commands"),
+    () => import("@tuyau/core/commands"),
+    () => import("@adonisjs-community/modules/commands"),
+    () => import("@adonisjs/mail/commands"),
+    () => import("@adonisjs/bouncer/commands"),
   ],
 
   /*
@@ -47,26 +47,26 @@ export default defineConfig({
   |
   */
   providers: [
-    () => import('@adonisjs/core/providers/app_provider'),
-    () => import('@adonisjs/core/providers/hash_provider'),
+    () => import("@adonisjs/core/providers/app_provider"),
+    () => import("@adonisjs/core/providers/hash_provider"),
     {
-      file: () => import('@adonisjs/core/providers/repl_provider'),
-      environment: ['repl', 'test'],
+      file: () => import("@adonisjs/core/providers/repl_provider"),
+      environment: ["repl", "test"],
     },
-    () => import('@adonisjs/core/providers/vinejs_provider'),
-    () => import('@adonisjs/cors/cors_provider'),
-    () => import('@adonisjs/lucid/database_provider'),
-    () => import('@adonisjs/session/session_provider'),
-    () => import('@adonisjs/auth/auth_provider'),
-    () => import('@adonisjs-community/girouette/girouette_provider'),
-    () => import('@adonisjs/drive/drive_provider'),
-    () => import('@adonisjs/mail/mail_provider'),
-    () => import('@adonisjs/bouncer/bouncer_provider'),
-    () => import('@adonisjs/transmit/transmit_provider'),
-    () => import('@monocle.sh/adonisjs-agent/monocle_provider'),
-    () => import('@adonisjs/i18n/i18n_provider'),
-    () => import('#core/providers/api_provider'),
-    () => import('#core/providers/vine_provider'),
+    () => import("@adonisjs/core/providers/vinejs_provider"),
+    () => import("@adonisjs/cors/cors_provider"),
+    () => import("@adonisjs/lucid/database_provider"),
+    () => import("@adonisjs/session/session_provider"),
+    () => import("@adonisjs/auth/auth_provider"),
+    () => import("@adonisjs-community/girouette/girouette_provider"),
+    () => import("@adonisjs/drive/drive_provider"),
+    () => import("@adonisjs/mail/mail_provider"),
+    () => import("@adonisjs/bouncer/bouncer_provider"),
+    () => import("@adonisjs/transmit/transmit_provider"),
+    () => import("@monocle.sh/adonisjs-agent/monocle_provider"),
+    () => import("@adonisjs/i18n/i18n_provider"),
+    () => import("#core/providers/api_provider"),
+    () => import("#core/providers/vine_provider"),
   ],
 
   /*
@@ -78,9 +78,9 @@ export default defineConfig({
   |
   */
   preloads: [
-    () => import('#start/routes'),
-    () => import('#start/routes.girouette'),
-    () => import('#start/kernel'),
+    () => import("#start/routes"),
+    () => import("#start/routes.girouette"),
+    () => import("#start/kernel"),
   ],
 
   /*
@@ -95,13 +95,13 @@ export default defineConfig({
   tests: {
     suites: [
       {
-        files: ['app/**/tests/unit/**/*.spec(.ts|.js)'],
-        name: 'unit',
+        files: ["app/**/tests/unit/**/*.spec{.ts,.js}"],
+        name: "unit",
         timeout: 2000,
       },
       {
-        files: ['app/**/tests/functional/**/*.spec(.ts|.js)'],
-        name: 'functional',
+        files: ["app/**/tests/functional/**/*.spec{.ts,.js}"],
+        name: "functional",
         timeout: 30000,
       },
     ],
@@ -109,7 +109,7 @@ export default defineConfig({
   },
   metaFiles: [
     {
-      pattern: 'resources/lang/**/*.{json,yaml,yml}',
+      pattern: "resources/lang/**/*.{json,yaml,yml}",
       reloadServer: false,
     },
   ],
@@ -119,23 +119,23 @@ export default defineConfig({
       indexEntities({
         transformers: {
           enabled: true,
-          source: './app',
-          glob: ['**/*_transformer.ts'],
-          importAlias: '#app',
+          source: "./app",
+          glob: ["**/*_transformer.ts"],
+          importAlias: "#app",
         },
         controllers: {
           enabled: true,
-          source: './app',
-          glob: ['**/*_controller.ts'],
-          importAlias: '#app',
+          source: "./app",
+          glob: ["**/*_controller.ts"],
+          importAlias: "#app",
         },
       }),
       generateRegistry(),
       indexControllers({
-        source: './app',
-        glob: ['**/*_controller.ts'],
-        importAlias: '#app',
+        source: "./app",
+        glob: ["**/*_controller.ts"],
+        importAlias: "#app",
       }),
     ],
   },
-})
+});
