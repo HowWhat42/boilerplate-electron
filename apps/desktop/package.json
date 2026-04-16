@@ -4,29 +4,16 @@
   "description": "A boilerplate Electron desktop application built with React, TanStack Router, and TanStack Query.",
   "keywords": [],
   "license": "MIT",
-  "main": ".vite/build/main.js",
+  "type": "module",
+  "main": "dist/main.mjs",
   "scripts": {
-    "build": "tsc && electron-forge make",
-    "dev": "electron-forge start",
-    "dev:web": "vite --config vite.renderer.config.mts --mode web",
-    "format": "oxfmt ./src",
-    "lint": "oxlint ./src",
-    "make": "electron-forge make",
-    "package": "electron-forge package",
-    "publish": "electron-forge publish",
-    "routes:generate": "tsr generate",
-    "routes:watch": "tsr watch",
-    "start": "electron-forge start",
-    "test": "vitest --run",
-    "test:coverage": "vitest --coverage",
-    "test:e2e": "playwright test",
-    "test:e2e:headed": "playwright test --headed",
-    "test:e2e:ui": "playwright test --ui",
-    "test:ui": "vitest --ui",
-    "test:watch": "vitest",
-    "type-check": "tsc --noEmit"
+    "dev": "pnpm --filter @boilerplate/backend build:server && tsdown && node scripts/dev.mjs",
+    "build": "pnpm --filter @boilerplate/backend build && tsdown && vite build",
+    "package": "bash scripts/package.sh",
+    "release": "bash scripts/package.sh --publish always"
   },
   "dependencies": {
+    "@boilerplate/backend": "workspace:*",
     "@hookform/resolvers": "^3.10.0",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-alert-dialog": "^1.1.15",
@@ -66,6 +53,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "electron-squirrel-startup": "^1.0.1",
+    "electron-updater": "^6.8.3",
     "embla-carousel-react": "^8.6.0",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.552.0",
@@ -83,16 +71,6 @@
     "zod": "^4.1.12"
   },
   "devDependencies": {
-    "@boilerplate/backend": "workspace:*",
-    "@electron-forge/cli": "^7.10.2",
-    "@electron-forge/maker-deb": "^7.10.2",
-    "@electron-forge/maker-rpm": "^7.10.2",
-    "@electron-forge/maker-squirrel": "^7.10.2",
-    "@electron-forge/maker-zip": "^7.10.2",
-    "@electron-forge/plugin-auto-unpack-natives": "^7.10.2",
-    "@electron-forge/plugin-fuses": "^7.10.2",
-    "@electron-forge/plugin-vite": "^7.10.2",
-    "@electron/fuses": "^1.8.0",
     "@playwright/test": "^1.56.1",
     "@tanstack/router-cli": "^1.134.12",
     "@testing-library/jest-dom": "^6.9.1",
@@ -106,16 +84,17 @@
     "@types/react-dom": "^19.2.2",
     "@vitest/ui": "^4.0.6",
     "babel-plugin-react-compiler": "^1.0.0",
-    "electron": "^39.0.0",
+    "electron": "^41.1.1",
+    "electron-builder": "^26.8.1",
     "jsdom": "^27.1.0",
     "playwright": "^1.56.1",
     "tailwindcss": "^4.1.16",
+    "tsdown": "^0.21.7",
     "typescript": "^5.9.3",
     "vite": "npm:rolldown-vite@latest",
     "vitest": "^4.0.6"
   },
   "overrides": {
     "vite": "npm:rolldown-vite@latest"
-  },
-  "productName": "electron-tanstack-shadcn"
+  }
 }

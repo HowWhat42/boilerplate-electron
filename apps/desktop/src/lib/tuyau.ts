@@ -1,5 +1,3 @@
-/// <reference path="../../../backend/config/auth.ts" />
-
 import { toast } from 'sonner'
 import { createTuyauReactQueryClient } from '@tuyau/react-query'
 import { TuyauHTTPError, createTuyau } from '@tuyau/core/client'

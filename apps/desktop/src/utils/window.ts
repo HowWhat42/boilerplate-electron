@@ -1,5 +1,8 @@
+import { fileURLToPath } from 'node:url'
 import path from 'node:path'
-import { BrowserWindow } from 'electron'
+import { app, BrowserWindow } from 'electron'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 let mainWindow: BrowserWindow | null = null
 
@@ -24,20 +27,20 @@ export function createWindow() {
         }
       : {}),
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, 'preload.cjs'),
       contextIsolation: true,
       nodeIntegration: false,
     },
   })
 
-  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
-    mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL)
-  } else {
-    mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`))
-  }
-
-  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+  // In dev, the renderer is served by Vite at VITE_DEV_SERVER_URL.
+  // In production, load the built index.html from dist/renderer.
+  const devServerUrl = process.env.VITE_DEV_SERVER_URL
+  if (!app.isPackaged && devServerUrl) {
+    mainWindow.loadURL(devServerUrl)
     mainWindow.webContents.openDevTools()
+  } else {
+    mainWindow.loadFile(path.join(__dirname, 'renderer', 'index.html'))
   }
 
   mainWindow.on('closed', () => {

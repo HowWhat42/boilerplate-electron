@@ -13,8 +13,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  lint-typecheck-test:
-    name: Lint, Typecheck & Test
+  checks:
+    name: Lint, Build, Typecheck & Test
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -42,8 +42,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - name: Enable corepack
+        run: corepack enable
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -52,10 +52,13 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Lint
         run: pnpm lint
+
+      - name: Build
+        run: pnpm turbo build
 
       - name: Typecheck
         run: pnpm typecheck

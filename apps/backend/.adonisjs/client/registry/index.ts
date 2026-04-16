@@ -1,106 +1,120 @@
-/* eslint-disable prettier/prettier */
+/* eslint-disable */
 import type { AdonisEndpoint } from '@tuyau/core/types'
-import type { Registry } from './schema.d.ts'
+
 import type { ApiDefinition } from './tree.d.ts'
+import type { Registry } from './schema.d.ts'
 
 const placeholder: any = {}
 
 const routes = {
-  'event_stream': {
-    methods: ["GET","HEAD"],
-    pattern: '/__transmit/events',
-    tokens: [{"old":"/__transmit/events","type":0,"val":"__transmit","end":""},{"old":"/__transmit/events","type":0,"val":"events","end":""}],
-    types: placeholder as Registry['event_stream']['types'],
+  'otlp.traces': {
+    methods: ['POST'],
+    pattern: '/v1/traces',
+    tokens: [
+      { old: '/v1/traces', type: 0, val: 'v1', end: '' },
+      { old: '/v1/traces', type: 0, val: 'traces', end: '' },
+    ],
+    types: placeholder as Registry['otlp.traces']['types'],
   },
-  'subscribe': {
-    methods: ["POST"],
-    pattern: '/__transmit/subscribe',
-    tokens: [{"old":"/__transmit/subscribe","type":0,"val":"__transmit","end":""},{"old":"/__transmit/subscribe","type":0,"val":"subscribe","end":""}],
-    types: placeholder as Registry['subscribe']['types'],
+  'otlp.logs': {
+    methods: ['POST'],
+    pattern: '/v1/logs',
+    tokens: [
+      { old: '/v1/logs', type: 0, val: 'v1', end: '' },
+      { old: '/v1/logs', type: 0, val: 'logs', end: '' },
+    ],
+    types: placeholder as Registry['otlp.logs']['types'],
   },
-  'unsubscribe': {
-    methods: ["POST"],
-    pattern: '/__transmit/unsubscribe',
-    tokens: [{"old":"/__transmit/unsubscribe","type":0,"val":"__transmit","end":""},{"old":"/__transmit/unsubscribe","type":0,"val":"unsubscribe","end":""}],
-    types: placeholder as Registry['unsubscribe']['types'],
+  'traces.index': {
+    methods: ['GET', 'HEAD'],
+    pattern: '/api/traces',
+    tokens: [
+      { old: '/api/traces', type: 0, val: 'api', end: '' },
+      { old: '/api/traces', type: 0, val: 'traces', end: '' },
+    ],
+    types: placeholder as Registry['traces.index']['types'],
   },
-  'core': {
-    methods: ["GET","HEAD"],
-    pattern: '/health',
-    tokens: [{"old":"/health","type":0,"val":"health","end":""}],
-    types: placeholder as Registry['core']['types'],
+  'traces.show': {
+    methods: ['GET', 'HEAD'],
+    pattern: '/api/traces/:traceId',
+    tokens: [
+      { old: '/api/traces/:traceId', type: 0, val: 'api', end: '' },
+      { old: '/api/traces/:traceId', type: 0, val: 'traces', end: '' },
+      { old: '/api/traces/:traceId', type: 1, val: 'traceId', end: '' },
+    ],
+    types: placeholder as Registry['traces.show']['types'],
   },
-  'admin impersonation.impersonateUser': {
-    methods: ["POST"],
-    pattern: '/admin/impersonate/:user_id/start',
-    tokens: [{"old":"/admin/impersonate/:user_id/start","type":0,"val":"admin","end":""},{"old":"/admin/impersonate/:user_id/start","type":0,"val":"impersonate","end":""},{"old":"/admin/impersonate/:user_id/start","type":1,"val":"user_id","end":""},{"old":"/admin/impersonate/:user_id/start","type":0,"val":"start","end":""}],
-    types: placeholder as Registry['admin impersonation.impersonateUser']['types'],
+  'queries.index': {
+    methods: ['GET', 'HEAD'],
+    pattern: '/api/queries',
+    tokens: [
+      { old: '/api/queries', type: 0, val: 'api', end: '' },
+      { old: '/api/queries', type: 0, val: 'queries', end: '' },
+    ],
+    types: placeholder as Registry['queries.index']['types'],
   },
-  'admin impersonation.stopImpersonation': {
-    methods: ["POST"],
-    pattern: '/admin/impersonate/stop',
-    tokens: [{"old":"/admin/impersonate/stop","type":0,"val":"admin","end":""},{"old":"/admin/impersonate/stop","type":0,"val":"impersonate","end":""},{"old":"/admin/impersonate/stop","type":0,"val":"stop","end":""}],
-    types: placeholder as Registry['admin impersonation.stopImpersonation']['types'],
+  'exceptions.index': {
+    methods: ['GET', 'HEAD'],
+    pattern: '/api/exceptions',
+    tokens: [
+      { old: '/api/exceptions', type: 0, val: 'api', end: '' },
+      { old: '/api/exceptions', type: 0, val: 'exceptions', end: '' },
+    ],
+    types: placeholder as Registry['exceptions.index']['types'],
   },
-  'admin impersonation.impersonationStatus': {
-    methods: ["GET"],
-    pattern: '/admin/impersonate/status',
-    tokens: [{"old":"/admin/impersonate/status","type":0,"val":"admin","end":""},{"old":"/admin/impersonate/status","type":0,"val":"impersonate","end":""},{"old":"/admin/impersonate/status","type":0,"val":"status","end":""}],
-    types: placeholder as Registry['admin impersonation.impersonationStatus']['types'],
+  'logs.index': {
+    methods: ['GET', 'HEAD'],
+    pattern: '/api/logs',
+    tokens: [
+      { old: '/api/logs', type: 0, val: 'api', end: '' },
+      { old: '/api/logs', type: 0, val: 'logs', end: '' },
+    ],
+    types: placeholder as Registry['logs.index']['types'],
   },
-  'admin users.index': {
-    methods: ["GET"],
-    pattern: '/admin/users',
-    tokens: [{"old":"/admin/users","type":0,"val":"admin","end":""},{"old":"/admin/users","type":0,"val":"users","end":""}],
-    types: placeholder as Registry['admin users.index']['types'],
+  'services.index': {
+    methods: ['GET', 'HEAD'],
+    pattern: '/api/services',
+    tokens: [
+      { old: '/api/services', type: 0, val: 'api', end: '' },
+      { old: '/api/services', type: 0, val: 'services', end: '' },
+    ],
+    types: placeholder as Registry['services.index']['types'],
   },
-  'auth.register': {
-    methods: ["POST"],
-    pattern: '/register',
-    tokens: [{"old":"/register","type":0,"val":"register","end":""}],
-    types: placeholder as Registry['auth.register']['types'],
+  'jobs.index': {
+    methods: ['GET', 'HEAD'],
+    pattern: '/api/jobs',
+    tokens: [
+      { old: '/api/jobs', type: 0, val: 'api', end: '' },
+      { old: '/api/jobs', type: 0, val: 'jobs', end: '' },
+    ],
+    types: placeholder as Registry['jobs.index']['types'],
   },
-  'auth.login': {
-    methods: ["POST"],
-    pattern: '/login',
-    tokens: [{"old":"/login","type":0,"val":"login","end":""}],
-    types: placeholder as Registry['auth.login']['types'],
+  'commands.index': {
+    methods: ['GET', 'HEAD'],
+    pattern: '/api/commands',
+    tokens: [
+      { old: '/api/commands', type: 0, val: 'api', end: '' },
+      { old: '/api/commands', type: 0, val: 'commands', end: '' },
+    ],
+    types: placeholder as Registry['commands.index']['types'],
   },
-  'auth.me': {
-    methods: ["GET"],
-    pattern: '/me',
-    tokens: [{"old":"/me","type":0,"val":"me","end":""}],
-    types: placeholder as Registry['auth.me']['types'],
+  'external_calls.index': {
+    methods: ['GET', 'HEAD'],
+    pattern: '/api/external-calls',
+    tokens: [
+      { old: '/api/external-calls', type: 0, val: 'api', end: '' },
+      { old: '/api/external-calls', type: 0, val: 'external-calls', end: '' },
+    ],
+    types: placeholder as Registry['external_calls.index']['types'],
   },
-  'auth.logout': {
-    methods: ["POST"],
-    pattern: '/logout',
-    tokens: [{"old":"/logout","type":0,"val":"logout","end":""}],
-    types: placeholder as Registry['auth.logout']['types'],
-  },
-  'email.verifyEmail': {
-    methods: ["POST"],
-    pattern: '/auth/email/verify/:token',
-    tokens: [{"old":"/auth/email/verify/:token","type":0,"val":"auth","end":""},{"old":"/auth/email/verify/:token","type":0,"val":"email","end":""},{"old":"/auth/email/verify/:token","type":0,"val":"verify","end":""},{"old":"/auth/email/verify/:token","type":1,"val":"token","end":""}],
-    types: placeholder as Registry['email.verifyEmail']['types'],
-  },
-  'email.resendVerificationEmail': {
-    methods: ["POST"],
-    pattern: '/auth/email/resend',
-    tokens: [{"old":"/auth/email/resend","type":0,"val":"auth","end":""},{"old":"/auth/email/resend","type":0,"val":"email","end":""},{"old":"/auth/email/resend","type":0,"val":"resend","end":""}],
-    types: placeholder as Registry['email.resendVerificationEmail']['types'],
-  },
-  'password.forgotPassword': {
-    methods: ["POST"],
-    pattern: '/auth/password/forgot',
-    tokens: [{"old":"/auth/password/forgot","type":0,"val":"auth","end":""},{"old":"/auth/password/forgot","type":0,"val":"password","end":""},{"old":"/auth/password/forgot","type":0,"val":"forgot","end":""}],
-    types: placeholder as Registry['password.forgotPassword']['types'],
-  },
-  'password.resetPassword': {
-    methods: ["POST"],
-    pattern: '/auth/password/reset/:token',
-    tokens: [{"old":"/auth/password/reset/:token","type":0,"val":"auth","end":""},{"old":"/auth/password/reset/:token","type":0,"val":"password","end":""},{"old":"/auth/password/reset/:token","type":0,"val":"reset","end":""},{"old":"/auth/password/reset/:token","type":1,"val":"token","end":""}],
-    types: placeholder as Registry['password.resetPassword']['types'],
+  'events.stream': {
+    methods: ['GET', 'HEAD'],
+    pattern: '/api/events',
+    tokens: [
+      { old: '/api/events', type: 0, val: 'api', end: '' },
+      { old: '/api/events', type: 0, val: 'events', end: '' },
+    ],
+    types: placeholder as Registry['events.stream']['types'],
   },
 } as const satisfies Record<string, AdonisEndpoint>
 

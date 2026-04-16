@@ -1,21 +1,34 @@
 {
   "name": "boilerplate",
   "version": "1.0.0",
+  "private": true,
   "description": "",
   "scripts": {
-    "dev": "docker compose up -d && turbo dev --filter=@boilerplate/desktop",
-    "dev:web": "docker compose up -d && turbo dev --filter=@boilerplate/backend --filter=@boilerplate/frontend",
+    "prepare": "lefthook install || true",
+    "dev": "pnpm --filter @boilerplate/desktop dev",
     "format": "oxfmt",
     "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
     "typecheck": "turbo typecheck",
     "test": "turbo test",
-    "taze": "pnpx taze -r"
+    "checks": "turbo run lint typecheck",
+    "changeset": "changeset",
+    "release": "turbo build --filter='./apps/api' && changeset publish"
   },
   "devDependencies": {
+    "lefthook": "^2.1.4",
     "oxfmt": "^0.26.0",
     "oxlint": "^1.57.0",
     "oxlint-tsgolint": "^0.11.5",
     "turbo": "^2.9.1"
   },
-  "packageManager": "pnpm@10.33.0"
+  "packageManager": "pnpm@10.33.0",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3",
+      "electron",
+      "esbuild",
+      "lefthook"
+    ]
+  }
 }

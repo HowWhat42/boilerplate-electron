@@ -1,0 +1,316 @@
+{
+  "root": [
+    {
+      "domain": "root",
+      "pattern": "/v1/traces",
+      "matchers": {},
+      "tokens": [
+        { "old": "/v1/traces", "type": 0, "val": "v1", "end": "" },
+        { "old": "/v1/traces", "type": 0, "val": "traces", "end": "" }
+      ],
+      "meta": { "params": [] },
+      "name": "otlp.traces",
+      "handler": {
+        "method": "traces",
+        "reference": [null, "traces"],
+        "importExpression": "()=>import('#app/core/controllers/otlp_controller')",
+        "name": ""
+      },
+      "methods": ["POST"],
+      "middleware": {}
+    },
+    {
+      "domain": "root",
+      "pattern": "/v1/logs",
+      "matchers": {},
+      "tokens": [
+        { "old": "/v1/logs", "type": 0, "val": "v1", "end": "" },
+        { "old": "/v1/logs", "type": 0, "val": "logs", "end": "" }
+      ],
+      "meta": { "params": [] },
+      "name": "otlp.logs",
+      "handler": {
+        "method": "logs",
+        "reference": [null, "logs"],
+        "importExpression": "()=>import('#app/core/controllers/otlp_controller')",
+        "name": ""
+      },
+      "methods": ["POST"],
+      "middleware": {}
+    },
+    {
+      "domain": "root",
+      "pattern": "/api/services",
+      "matchers": {},
+      "tokens": [
+        { "old": "/api/services", "type": 0, "val": "api", "end": "" },
+        { "old": "/api/services", "type": 0, "val": "services", "end": "" }
+      ],
+      "meta": { "params": [] },
+      "name": "services.index",
+      "handler": {
+        "method": "listServices",
+        "reference": [null, "listServices"],
+        "importExpression": "()=>import('#app/traces/controllers/traces_controller')",
+        "name": ""
+      },
+      "methods": ["GET", "HEAD"],
+      "middleware": {}
+    },
+    {
+      "domain": "root",
+      "pattern": "/api/traces",
+      "matchers": {},
+      "tokens": [
+        { "old": "/api/traces", "type": 0, "val": "api", "end": "" },
+        { "old": "/api/traces", "type": 0, "val": "traces", "end": "" }
+      ],
+      "meta": { "params": [] },
+      "name": "traces.index",
+      "handler": {
+        "method": "index",
+        "reference": [null, "index"],
+        "importExpression": "()=>import('#app/traces/controllers/traces_controller')",
+        "name": ""
+      },
+      "methods": ["GET", "HEAD"],
+      "middleware": {}
+    },
+    {
+      "domain": "root",
+      "pattern": "/api/traces/:traceId",
+      "matchers": {},
+      "tokens": [
+        { "old": "/api/traces/:traceId", "type": 0, "val": "api", "end": "" },
+        { "old": "/api/traces/:traceId", "type": 0, "val": "traces", "end": "" },
+        { "old": "/api/traces/:traceId", "type": 1, "val": "traceId", "end": "" }
+      ],
+      "meta": { "params": ["traceId"] },
+      "name": "traces.show",
+      "handler": {
+        "method": "show",
+        "reference": [null, "show"],
+        "importExpression": "()=>import('#app/traces/controllers/traces_controller')",
+        "name": ""
+      },
+      "methods": ["GET", "HEAD"],
+      "middleware": {}
+    },
+    {
+      "domain": "root",
+      "pattern": "/api/queries",
+      "matchers": {},
+      "tokens": [
+        { "old": "/api/queries", "type": 0, "val": "api", "end": "" },
+        { "old": "/api/queries", "type": 0, "val": "queries", "end": "" }
+      ],
+      "meta": { "params": [] },
+      "name": "queries.index",
+      "handler": {
+        "method": "index",
+        "reference": [null, "index"],
+        "importExpression": "()=>import('#app/queries/controllers/queries_controller')",
+        "name": ""
+      },
+      "methods": ["GET", "HEAD"],
+      "middleware": {}
+    },
+    {
+      "domain": "root",
+      "pattern": "/api/exceptions",
+      "matchers": {},
+      "tokens": [
+        { "old": "/api/exceptions", "type": 0, "val": "api", "end": "" },
+        { "old": "/api/exceptions", "type": 0, "val": "exceptions", "end": "" }
+      ],
+      "meta": { "params": [] },
+      "name": "exceptions.index",
+      "handler": {
+        "method": "index",
+        "reference": [null, "index"],
+        "importExpression": "()=>import('#app/exceptions/controllers/exceptions_controller')",
+        "name": ""
+      },
+      "methods": ["GET", "HEAD"],
+      "middleware": {}
+    },
+    {
+      "domain": "root",
+      "pattern": "/api/jobs",
+      "matchers": {},
+      "tokens": [
+        { "old": "/api/jobs", "type": 0, "val": "api", "end": "" },
+        { "old": "/api/jobs", "type": 0, "val": "jobs", "end": "" }
+      ],
+      "meta": { "params": [] },
+      "name": "jobs.index",
+      "handler": {
+        "method": "index",
+        "reference": [null, "index"],
+        "importExpression": "()=>import('#app/jobs/controllers/jobs_controller')",
+        "name": ""
+      },
+      "methods": ["GET", "HEAD"],
+      "middleware": {}
+    },
+    {
+      "domain": "root",
+      "pattern": "/api/commands",
+      "matchers": {},
+      "tokens": [
+        { "old": "/api/commands", "type": 0, "val": "api", "end": "" },
+        { "old": "/api/commands", "type": 0, "val": "commands", "end": "" }
+      ],
+      "meta": { "params": [] },
+      "name": "commands.index",
+      "handler": {
+        "method": "index",
+        "reference": [null, "index"],
+        "importExpression": "()=>import('#app/commands/controllers/commands_controller')",
+        "name": ""
+      },
+      "methods": ["GET", "HEAD"],
+      "middleware": {}
+    },
+    {
+      "domain": "root",
+      "pattern": "/api/external-calls",
+      "matchers": {},
+      "tokens": [
+        { "old": "/api/external-calls", "type": 0, "val": "api", "end": "" },
+        { "old": "/api/external-calls", "type": 0, "val": "external-calls", "end": "" }
+      ],
+      "meta": { "params": [] },
+      "name": "external_calls.index",
+      "handler": {
+        "method": "index",
+        "reference": [null, "index"],
+        "importExpression": "()=>import('#app/external_calls/controllers/external_calls_controller')",
+        "name": ""
+      },
+      "methods": ["GET", "HEAD"],
+      "middleware": {}
+    },
+    {
+      "domain": "root",
+      "pattern": "/api/logs",
+      "matchers": {},
+      "tokens": [
+        { "old": "/api/logs", "type": 0, "val": "api", "end": "" },
+        { "old": "/api/logs", "type": 0, "val": "logs", "end": "" }
+      ],
+      "meta": { "params": [] },
+      "name": "logs.index",
+      "handler": {
+        "method": "index",
+        "reference": [null, "index"],
+        "importExpression": "()=>import('#app/logs/controllers/logs_controller')",
+        "name": ""
+      },
+      "methods": ["GET", "HEAD"],
+      "middleware": {}
+    },
+    {
+      "domain": "root",
+      "pattern": "/api/data",
+      "matchers": {},
+      "tokens": [
+        { "old": "/api/data", "type": 0, "val": "api", "end": "" },
+        { "old": "/api/data", "type": 0, "val": "data", "end": "" }
+      ],
+      "meta": { "params": [] },
+      "name": "data.clear",
+      "handler": {
+        "method": "clear",
+        "reference": [null, "clear"],
+        "importExpression": "()=>import('#app/core/controllers/data_controller')",
+        "name": ""
+      },
+      "methods": ["DELETE"],
+      "middleware": {}
+    },
+    {
+      "domain": "root",
+      "pattern": "/api/events",
+      "matchers": {},
+      "tokens": [
+        { "old": "/api/events", "type": 0, "val": "api", "end": "" },
+        { "old": "/api/events", "type": 0, "val": "events", "end": "" }
+      ],
+      "meta": { "params": [] },
+      "name": "events.stream",
+      "handler": {
+        "method": "stream",
+        "reference": [null, "stream"],
+        "importExpression": "()=>import('#app/core/controllers/sse_controller')",
+        "name": ""
+      },
+      "methods": ["GET", "HEAD"],
+      "middleware": {}
+    },
+    {
+      "domain": "root",
+      "pattern": "/mcp",
+      "matchers": {},
+      "tokens": [{ "old": "/mcp", "type": 0, "val": "mcp", "end": "" }],
+      "meta": { "params": [] },
+      "name": "mcp.handle",
+      "handler": {
+        "method": "handle",
+        "reference": [null, "handle"],
+        "importExpression": "()=>import('#app/mcp/controllers/mcp_controller')",
+        "name": ""
+      },
+      "methods": ["POST"],
+      "middleware": {}
+    },
+    {
+      "domain": "root",
+      "pattern": "/mcp",
+      "matchers": {},
+      "tokens": [{ "old": "/mcp", "type": 0, "val": "mcp", "end": "" }],
+      "meta": { "params": [] },
+      "name": "mcp.stream",
+      "handler": {
+        "method": "handle",
+        "reference": [null, "handle"],
+        "importExpression": "()=>import('#app/mcp/controllers/mcp_controller')",
+        "name": ""
+      },
+      "methods": ["GET", "HEAD"],
+      "middleware": {}
+    },
+    {
+      "domain": "root",
+      "pattern": "/mcp",
+      "matchers": {},
+      "tokens": [{ "old": "/mcp", "type": 0, "val": "mcp", "end": "" }],
+      "meta": { "params": [] },
+      "name": "mcp.delete",
+      "handler": {
+        "method": "handle",
+        "reference": [null, "handle"],
+        "importExpression": "()=>import('#app/mcp/controllers/mcp_controller')",
+        "name": ""
+      },
+      "methods": ["DELETE"],
+      "middleware": {}
+    },
+    {
+      "domain": "root",
+      "pattern": "/*",
+      "matchers": {},
+      "tokens": [{ "old": "/*", "type": 2, "val": "*", "end": "" }],
+      "meta": { "params": [] },
+      "name": "spa.fallback",
+      "handler": {
+        "method": "handle",
+        "reference": [null, "handle"],
+        "importExpression": "()=>import('#app/core/controllers/spa_controller')",
+        "name": ""
+      },
+      "methods": ["GET", "HEAD"],
+      "middleware": {}
+    }
+  ]
+}

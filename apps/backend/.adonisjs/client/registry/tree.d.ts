@@ -1,31 +1,37 @@
-/* eslint-disable prettier/prettier */
+/* eslint-disable */
 import type { routes } from './index.ts'
 
 export interface ApiDefinition {
-  eventStream: typeof routes['event_stream']
-  subscribe: typeof routes['subscribe']
-  unsubscribe: typeof routes['unsubscribe']
-  core: typeof routes['core']
-  adminImpersonation: {
-    impersonateUser: typeof routes['admin impersonation.impersonateUser']
-    stopImpersonation: typeof routes['admin impersonation.stopImpersonation']
-    impersonationStatus: typeof routes['admin impersonation.impersonationStatus']
+  otlp: {
+    traces: (typeof routes)['otlp.traces']
+    logs: (typeof routes)['otlp.logs']
   }
-  adminUsers: {
-    index: typeof routes['admin users.index']
+  traces: {
+    index: (typeof routes)['traces.index']
+    show: (typeof routes)['traces.show']
   }
-  auth: {
-    register: typeof routes['auth.register']
-    login: typeof routes['auth.login']
-    me: typeof routes['auth.me']
-    logout: typeof routes['auth.logout']
+  queries: {
+    index: (typeof routes)['queries.index']
   }
-  email: {
-    verifyEmail: typeof routes['email.verifyEmail']
-    resendVerificationEmail: typeof routes['email.resendVerificationEmail']
+  exceptions: {
+    index: (typeof routes)['exceptions.index']
   }
-  password: {
-    forgotPassword: typeof routes['password.forgotPassword']
-    resetPassword: typeof routes['password.resetPassword']
+  logs: {
+    index: (typeof routes)['logs.index']
+  }
+  services: {
+    index: (typeof routes)['services.index']
+  }
+  jobs: {
+    index: (typeof routes)['jobs.index']
+  }
+  commands: {
+    index: (typeof routes)['commands.index']
+  }
+  external_calls: {
+    index: (typeof routes)['external_calls.index']
+  }
+  events: {
+    stream: (typeof routes)['events.stream']
   }
 }

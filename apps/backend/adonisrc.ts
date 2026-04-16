@@ -1,141 +1,29 @@
-import { generateRegistry } from "@tuyau/core/hooks";
-import { defineConfig } from "@adonisjs/core/app";
-import { indexEntities } from "@adonisjs/core";
-import { indexControllers } from "@adonisjs-community/girouette";
+import { generateRegistry } from '@tuyau/core/hooks'
+import { defineConfig } from '@adonisjs/core/app'
+import { indexEntities } from '@adonisjs/core'
 
 export default defineConfig({
-  /*
-  |--------------------------------------------------------------------------
-  | Experimental flags
-  |--------------------------------------------------------------------------
-  |
-  | The following features will be enabled by default in the next major release
-  | of AdonisJS. You can opt into them today to avoid any breaking changes
-  | during upgrade.
-  |
-  */
-  experimental: {
-    mergeMultipartFieldsAndFiles: true,
-    shutdownInReverseOrder: true,
-  },
-
-  /*
-  |--------------------------------------------------------------------------
-  | Commands
-  |--------------------------------------------------------------------------
-  |
-  | List of ace commands to register from packages. The application commands
-  | will be scanned automatically from the "./commands" directory.
-  |
-  */
-  commands: [
-    () => import("@adonisjs/core/commands"),
-    () => import("@adonisjs/lucid/commands"),
-    () => import("@tuyau/core/commands"),
-    () => import("@adonisjs-community/modules/commands"),
-    () => import("@adonisjs/mail/commands"),
-    () => import("@adonisjs/bouncer/commands"),
-  ],
-
-  /*
-  |--------------------------------------------------------------------------
-  | Service providers
-  |--------------------------------------------------------------------------
-  |
-  | List of service providers to import and register when booting the
-  | application
-  |
-  */
   providers: [
-    () => import("@adonisjs/core/providers/app_provider"),
-    () => import("@adonisjs/core/providers/hash_provider"),
-    {
-      file: () => import("@adonisjs/core/providers/repl_provider"),
-      environment: ["repl", "test"],
-    },
-    () => import("@adonisjs/core/providers/vinejs_provider"),
-    () => import("@adonisjs/cors/cors_provider"),
-    () => import("@adonisjs/lucid/database_provider"),
-    () => import("@adonisjs/session/session_provider"),
-    () => import("@adonisjs/auth/auth_provider"),
-    () => import("@adonisjs-community/girouette/girouette_provider"),
-    () => import("@adonisjs/drive/drive_provider"),
-    () => import("@adonisjs/mail/mail_provider"),
-    () => import("@adonisjs/bouncer/bouncer_provider"),
-    () => import("@adonisjs/transmit/transmit_provider"),
-    () => import("@monocle.sh/adonisjs-agent/monocle_provider"),
-    () => import("@adonisjs/i18n/i18n_provider"),
-    () => import("#core/providers/api_provider"),
-    () => import("#core/providers/vine_provider"),
+    () => import('@adonisjs/core/providers/app_provider'),
+    () => import('@adonisjs/core/providers/vinejs_provider'),
+    () => import('@adonisjs/static/static_provider'),
   ],
-
-  /*
-  |--------------------------------------------------------------------------
-  | Preloads
-  |--------------------------------------------------------------------------
-  |
-  | List of modules to import before starting the application.
-  |
-  */
   preloads: [
-    () => import("#start/routes"),
-    () => import("#start/routes.girouette"),
-    () => import("#start/kernel"),
+    () => import('#app/core/providers/api_provider'),
+    () => import('./start/kernel.js'),
+    () => import('./start/routes.js'),
   ],
-
-  /*
-  |--------------------------------------------------------------------------
-  | Tests
-  |--------------------------------------------------------------------------
-  |
-  | List of test suites to organize tests by their type. Feel free to remove
-  | and add additional suites.
-  |
-  */
-  tests: {
-    suites: [
-      {
-        files: ["app/**/tests/unit/**/*.spec{.ts,.js}"],
-        name: "unit",
-        timeout: 2000,
-      },
-      {
-        files: ["app/**/tests/functional/**/*.spec{.ts,.js}"],
-        name: "functional",
-        timeout: 30000,
-      },
-    ],
-    forceExit: false,
-  },
-  metaFiles: [
-    {
-      pattern: "resources/lang/**/*.{json,yaml,yml}",
-      reloadServer: false,
-    },
-  ],
-
   hooks: {
     init: [
       indexEntities({
         transformers: {
           enabled: true,
-          source: "./app",
-          glob: ["**/*_transformer.ts"],
-          importAlias: "#app",
-        },
-        controllers: {
-          enabled: true,
-          source: "./app",
-          glob: ["**/*_controller.ts"],
-          importAlias: "#app",
+          source: './app',
+          glob: ['**/transformers/*_transformer.ts'],
+          importAlias: '#app',
         },
       }),
       generateRegistry(),
-      indexControllers({
-        source: "./app",
-        glob: ["**/*_controller.ts"],
-        importAlias: "#app",
-      }),
     ],
   },
-});
+})

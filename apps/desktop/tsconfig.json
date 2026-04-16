@@ -21,10 +21,5 @@
     "types": ["vitest/globals", "@testing-library/jest-dom"]
   },
   "include": ["src"],
-  "exclude": ["src/components/ui/calendar.tsx", "src/components/ui/chart.tsx"],
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
-    }
-  ]
+  "exclude": ["src/components/ui/calendar.tsx", "src/components/ui/chart.tsx", "dist", "release"]
 }

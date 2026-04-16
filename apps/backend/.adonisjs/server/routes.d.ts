@@ -4,46 +4,60 @@ type ParamValue = string | number | bigint | boolean
 
 export type ScannedRoutes = {
   ALL: {
-    'event_stream': { paramsTuple?: []; params?: {} }
-    'subscribe': { paramsTuple?: []; params?: {} }
-    'unsubscribe': { paramsTuple?: []; params?: {} }
-    'core': { paramsTuple?: []; params?: {} }
-    'admin impersonation.impersonateUser': { paramsTuple: [ParamValue]; params: {'user_id': ParamValue} }
-    'admin impersonation.stopImpersonation': { paramsTuple?: []; params?: {} }
-    'admin impersonation.impersonationStatus': { paramsTuple?: []; params?: {} }
-    'admin users.index': { paramsTuple?: []; params?: {} }
-    'auth.register': { paramsTuple?: []; params?: {} }
-    'auth.login': { paramsTuple?: []; params?: {} }
-    'auth.me': { paramsTuple?: []; params?: {} }
-    'auth.logout': { paramsTuple?: []; params?: {} }
-    'email.verifyEmail': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
-    'email.resendVerificationEmail': { paramsTuple?: []; params?: {} }
-    'password.forgotPassword': { paramsTuple?: []; params?: {} }
-    'password.resetPassword': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
-  }
-  GET: {
-    'event_stream': { paramsTuple?: []; params?: {} }
-    'core': { paramsTuple?: []; params?: {} }
-    'admin impersonation.impersonationStatus': { paramsTuple?: []; params?: {} }
-    'admin users.index': { paramsTuple?: []; params?: {} }
-    'auth.me': { paramsTuple?: []; params?: {} }
-  }
-  HEAD: {
-    'event_stream': { paramsTuple?: []; params?: {} }
-    'core': { paramsTuple?: []; params?: {} }
+    'otlp.traces': { paramsTuple?: []; params?: {} }
+    'otlp.logs': { paramsTuple?: []; params?: {} }
+    'services.index': { paramsTuple?: []; params?: {} }
+    'traces.index': { paramsTuple?: []; params?: {} }
+    'traces.show': { paramsTuple: [ParamValue]; params: { traceId: ParamValue } }
+    'queries.index': { paramsTuple?: []; params?: {} }
+    'exceptions.index': { paramsTuple?: []; params?: {} }
+    'jobs.index': { paramsTuple?: []; params?: {} }
+    'commands.index': { paramsTuple?: []; params?: {} }
+    'external_calls.index': { paramsTuple?: []; params?: {} }
+    'logs.index': { paramsTuple?: []; params?: {} }
+    'data.clear': { paramsTuple?: []; params?: {} }
+    'events.stream': { paramsTuple?: []; params?: {} }
+    'mcp.handle': { paramsTuple?: []; params?: {} }
+    'mcp.stream': { paramsTuple?: []; params?: {} }
+    'mcp.delete': { paramsTuple?: []; params?: {} }
+    'spa.fallback': { paramsTuple: [...ParamValue[]]; params: { '*': ParamValue[] } }
   }
   POST: {
-    'subscribe': { paramsTuple?: []; params?: {} }
-    'unsubscribe': { paramsTuple?: []; params?: {} }
-    'admin impersonation.impersonateUser': { paramsTuple: [ParamValue]; params: {'user_id': ParamValue} }
-    'admin impersonation.stopImpersonation': { paramsTuple?: []; params?: {} }
-    'auth.register': { paramsTuple?: []; params?: {} }
-    'auth.login': { paramsTuple?: []; params?: {} }
-    'auth.logout': { paramsTuple?: []; params?: {} }
-    'email.verifyEmail': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
-    'email.resendVerificationEmail': { paramsTuple?: []; params?: {} }
-    'password.forgotPassword': { paramsTuple?: []; params?: {} }
-    'password.resetPassword': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
+    'otlp.traces': { paramsTuple?: []; params?: {} }
+    'otlp.logs': { paramsTuple?: []; params?: {} }
+    'mcp.handle': { paramsTuple?: []; params?: {} }
+  }
+  GET: {
+    'services.index': { paramsTuple?: []; params?: {} }
+    'traces.index': { paramsTuple?: []; params?: {} }
+    'traces.show': { paramsTuple: [ParamValue]; params: { traceId: ParamValue } }
+    'queries.index': { paramsTuple?: []; params?: {} }
+    'exceptions.index': { paramsTuple?: []; params?: {} }
+    'jobs.index': { paramsTuple?: []; params?: {} }
+    'commands.index': { paramsTuple?: []; params?: {} }
+    'external_calls.index': { paramsTuple?: []; params?: {} }
+    'logs.index': { paramsTuple?: []; params?: {} }
+    'events.stream': { paramsTuple?: []; params?: {} }
+    'mcp.stream': { paramsTuple?: []; params?: {} }
+    'spa.fallback': { paramsTuple: [...ParamValue[]]; params: { '*': ParamValue[] } }
+  }
+  HEAD: {
+    'services.index': { paramsTuple?: []; params?: {} }
+    'traces.index': { paramsTuple?: []; params?: {} }
+    'traces.show': { paramsTuple: [ParamValue]; params: { traceId: ParamValue } }
+    'queries.index': { paramsTuple?: []; params?: {} }
+    'exceptions.index': { paramsTuple?: []; params?: {} }
+    'jobs.index': { paramsTuple?: []; params?: {} }
+    'commands.index': { paramsTuple?: []; params?: {} }
+    'external_calls.index': { paramsTuple?: []; params?: {} }
+    'logs.index': { paramsTuple?: []; params?: {} }
+    'events.stream': { paramsTuple?: []; params?: {} }
+    'mcp.stream': { paramsTuple?: []; params?: {} }
+    'spa.fallback': { paramsTuple: [...ParamValue[]]; params: { '*': ParamValue[] } }
+  }
+  DELETE: {
+    'data.clear': { paramsTuple?: []; params?: {} }
+    'mcp.delete': { paramsTuple?: []; params?: {} }
   }
 }
 declare module '@adonisjs/core/types/http' {

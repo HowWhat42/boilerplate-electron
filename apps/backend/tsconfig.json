@@ -1,16 +1,10 @@
 {
-  "extends": "@adonisjs/tsconfig/tsconfig.app.json",
+  "extends": "@adonisjs/tsconfig/tsconfig.package.json",
   "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "rootDir": "./",
-    "outDir": "./build",
-    "jsx": "react-jsx",
-    "jsxImportSource": "react",
-    "paths": {
-      "~/*": ["./*"],
-      "~/generated/*": ["../.adonisjs/client/*"],
-      "~registry": ["../.adonisjs/client/registry.ts"]
-    }
+    "outDir": "./build"
   },
-  "include": ["./**/*.ts", "./**/*.tsx", "./.adonisjs/**/*.ts"],
-  "exclude": ["node_modules", "build"]
+  "exclude": ["ui", "tsdown.config.ts"]
 }
