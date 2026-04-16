@@ -2,35 +2,83 @@ name: Desktop Release
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - main
+    paths:
+      - 'apps/desktop/package.json'
   workflow_dispatch:
     inputs:
-      version:
-        description: 'Version tag to build (e.g. v0.0.1). Used only for workflow_dispatch.'
+      ref:
+        description: 'Git ref to release'
         required: false
 
-concurrency:
-  group: desktop-release-${{ github.ref }}
-  cancel-in-progress: false
+permissions:
+  contents: write
+
+concurrency: ${{ github.workflow }}-${{ github.event_name == 'workflow_dispatch' && inputs.ref || github.sha }}
 
 jobs:
-  build:
-    name: Build ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: 45
-
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: macos-latest
-          - os: ubuntu-latest
-          - os: windows-latest
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      should_release: ${{ steps.prepare.outputs.should_release }}
+      release_ref: ${{ steps.prepare.outputs.release_ref }}
+      version: ${{ steps.prepare.outputs.version }}
+      tag_exists: ${{ steps.prepare.outputs.tag_exists }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+          fetch-depth: 0
+
+      - name: Determine release version
+        id: prepare
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_BEFORE: ${{ github.event.before }}
+          RELEASE_REF_INPUT: ${{ inputs.ref }}
+        run: |
+          release_ref="${RELEASE_REF_INPUT:-$GITHUB_SHA}"
+          current_version=$(node -p "require('./apps/desktop/package.json').version")
+          previous_version=""
+          should_release="true"
+
+          if [[ "$EVENT_NAME" == "push" ]]; then
+            if git cat-file -e "${EVENT_BEFORE}:apps/desktop/package.json" 2>/dev/null; then
+              previous_version=$(git show "${EVENT_BEFORE}:apps/desktop/package.json" | node -p "JSON.parse(require('fs').readFileSync(0, 'utf8')).version")
+            fi
+
+            if [[ -n "$previous_version" && "$previous_version" == "$current_version" ]]; then
+              should_release="false"
+            fi
+          fi
+
+          tag_name="desktop-v${current_version}"
+          tag_exists="false"
+
+          if git rev-parse "$tag_name" >/dev/null 2>&1; then
+            tag_exists="true"
+          fi
+
+          echo "should_release=$should_release" >> "$GITHUB_OUTPUT"
+          echo "release_ref=$release_ref" >> "$GITHUB_OUTPUT"
+          echo "version=$current_version" >> "$GITHUB_OUTPUT"
+          echo "tag_exists=$tag_exists" >> "$GITHUB_OUTPUT"
+
+  build-macos:
+    needs: prepare
+    if: ${{ needs.prepare.outputs.should_release == 'true' }}
+    runs-on: macos-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.release_ref }}
 
       - name: Enable corepack
         run: corepack enable
@@ -38,20 +86,141 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 24
-          cache: pnpm
+          node-version: '25'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
 
-      - name: Build & publish desktop artifacts
-        working-directory: apps/desktop
+      - name: Build & package
+        run: pnpm --filter @boilerplate/desktop package -- --mac
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-release
+          retention-days: 1
+          path: |
+            apps/desktop/release/*.dmg
+            apps/desktop/release/*.zip
+            apps/desktop/release/*.yml
+
+  build-linux:
+    needs: prepare
+    if: ${{ needs.prepare.outputs.should_release == 'true' }}
+    runs-on: blacksmith-2vcpu-ubuntu-2404
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.release_ref }}
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '25'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build & package
+        run: pnpm --filter @boilerplate/desktop package -- --linux
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-release
+          retention-days: 1
+          path: |
+            apps/desktop/release/*.AppImage
+            apps/desktop/release/latest-linux.yml
+
+  build-windows:
+    needs: prepare
+    if: ${{ needs.prepare.outputs.should_release == 'true' }}
+    runs-on: blacksmith-2vcpu-windows-2025
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.release_ref }}
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '25'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build & package
+        run: pnpm --filter @boilerplate/desktop package -- --win
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-release
+          retention-days: 1
+          path: |
+            apps/desktop/release/*.exe
+            apps/desktop/release/latest.yml
+
+  publish-r2:
+    needs: [prepare, build-macos, build-linux, build-windows]
+    if: ${{ needs.prepare.outputs.should_release == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: Upload to Cloudflare R2
+        uses: ryand56/r2-upload-action@latest
+        with:
+          r2-account-id: ${{ secrets.R2_ACCOUNT_ID }}
+          r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          r2-bucket: boilerplate-releases
+          source-dir: artifacts
+          destination-dir: .
+
+  tag-release:
+    needs: [prepare, publish-r2]
+    if: ${{ needs.prepare.outputs.should_release == 'true' && github.event_name == 'push' && needs.prepare.outputs.tag_exists != 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.release_ref }}
+          fetch-depth: 0
+
+      - name: Create desktop tag
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # macOS notarization secrets (optional — leave unset until signing certs exist)
-          CSC_LINK: ${{ secrets.CSC_LINK }}
-          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-        run: pnpm run release
+          DESKTOP_VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag "desktop-v${DESKTOP_VERSION}" "$GITHUB_SHA"
+          git push origin "desktop-v${DESKTOP_VERSION}"
