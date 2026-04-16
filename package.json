@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "docker compose up -d && turbo dev",
+    "dev": "docker compose up -d && turbo dev --filter=@boilerplate/desktop",
+    "dev:web": "docker compose up -d && turbo dev --filter=@boilerplate/backend --filter=@boilerplate/frontend",
     "format": "oxfmt",
     "lint": "oxlint",
     "typecheck": "turbo typecheck",
