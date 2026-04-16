@@ -1,4 +1,0 @@
-name: boilerplate
-
-include:
-  - ./apps/backend/docker-compose.yaml
